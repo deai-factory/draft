@@ -1,41 +1,76 @@
 {
-    "machine": {
-        "gpu": 1,
-        "cpu": 1000,
-        "ram": 8000
-    },
-    "job": {
-        "APIVersion": "V1beta1",
-        "Spec": {
-            "Deal": {
-                "Concurrency": 1
-            },
-            "Docker": {
-                "Entrypoint": ["python", "/app/run_inference.py"],
-                "WorkingDirectory": "/app",
-                "EnvironmentVariables": [
-                    {{ if .MODEL_INPUT }}"MODEL_INPUT={{ js .MODEL_INPUT }}"{{ else }}"MODEL_INPUT=Write a haiku about Lilypads"{{ end }},
-                    "HF_HUB_OFFLINE=1"
-                ],
-                "Image": "narbs91/lilypad-falcon-7b-instruct-modulev8:latest"
-            },
-            "Engine": "Docker",
-            "Network": {
-                "Type": "None"
-            },
-            "Outputs": [
-                {
-                    "Name": "outputs",
-                    "Path": "/outputs"
-                }
-            ],
-            "PublisherSpec": {
-                "Type": "ipfs"
-            },
-            "Resources": {
-                "GPU": "1"
-            },
-            "Timeout": 600
-        }
+
+  "machine": {
+
+    "gpu": 0,
+
+    "cpu": 1000,
+
+    "ram": 100
+
+  },
+
+  "job": {
+
+    "APIVersion": "V1beta1",
+
+    "Spec": {
+
+      "Deal": {
+
+        "Concurrency": 1
+
+      },
+
+      "Docker": {
+
+        "Entrypoint": [
+
+          "/bin/bash",
+
+          "-c",
+
+          {{.Query}}
+
+        ],
+
+        "EnvironmentVariables": [
+
+          {{ if .Message }}"{{ subst "MESSAGE=%s" .Message }}"{{else}}"Message=Hello Dell World"{{ end }}
+          
+        ],
+
+        "Image": "gromacs/gromacs"
+
+      },
+
+      "Engine": "Docker",
+
+      "Network": {
+
+        "Type": "None"
+
+      },
+
+      "PublisherSpec": {
+
+        "Type": "IPFS"
+
+      },
+
+      "Outputs": [{ "Name": "outputs", "Path": "/outputs" }],
+      "Resources": { "GPU": "1", "CPU": "8", "Memory": "16Gb" },
+      "inputs": [ { "StorageSource": "IPFS", "Name": "inputs", "CID": {{.InputsCID}}, "path": "/inputs" }
+      },
+
+      "Timeout": 1800,
+
+      "Verifier": "Noop"
+
     }
+
+  }
+
 }
+
+
