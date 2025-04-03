@@ -1,0 +1,41 @@
+{
+    "machine": {
+        "gpu": 1,
+        "cpu": 1000,
+        "ram": 8000
+    },
+    "job": {
+        "APIVersion": "V1beta1",
+        "Spec": {
+            "Deal": {
+                "Concurrency": 1
+            },
+            "Docker": {
+                "Entrypoint": ["python", "/app/run_inference.py"],
+                "WorkingDirectory": "/app",
+                "EnvironmentVariables": [
+                    {{ if .MODEL_INPUT }}"MODEL_INPUT={{ js .MODEL_INPUT }}"{{ else }}"MODEL_INPUT=Write a haiku about Lilypads"{{ end }},
+                    "HF_HUB_OFFLINE=1"
+                ],
+                "Image": "narbs91/lilypad-falcon-7b-instruct-modulev8:latest"
+            },
+            "Engine": "Docker",
+            "Network": {
+                "Type": "None"
+            },
+            "Outputs": [
+                {
+                    "Name": "outputs",
+                    "Path": "/outputs"
+                }
+            ],
+            "PublisherSpec": {
+                "Type": "ipfs"
+            },
+            "Resources": {
+                "GPU": "1"
+            },
+            "Timeout": 600
+        }
+    }
+}
