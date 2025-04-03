@@ -1,22 +1,77 @@
 {
-  "machine": { "gpu": 1, "cpu": 8000, "ram": 16000 },
-  "gpus": [{ "vram": "24Gb" }]
+
+  "machine": {
+
+    "gpu": 0,
+
+    "cpu": 1000,
+
+    "ram": 100
+
+  },
+
   "job": {
+
     "APIVersion": "V1beta1",
+
     "Spec": {
-      "Deal": { "Concurrency": 1 },
-      "Docker": {
-        "Entrypoint": [
-          "ls", {{ .request }}
-        ],
-        "Image": "ubuntu"
+
+      "Deal": {
+
+        "Concurrency": 1
+
       },
+
+      "Docker": {
+
+        "Entrypoint": [
+
+          "/bin/sh",
+
+          "-c",
+
+          "echo \"$MESSAGE\""
+
+        ],
+
+        "EnvironmentVariables": [
+
+          {{ if .Message }}"{{ subst "MESSAGE=%s" .Message }}"{{else}}"Message=Hello Dell World"{{ end }}
+
+        ],
+
+        "Image": "ubunto"
+
+      },
+
       "Engine": "Docker",
-      "Network": { "Type": "None" },
+
+      "Network": {
+
+        "Type": "None"
+
+      },
+
+      "PublisherSpec": {
+
+        "Type": "IPFS"
+
+      },
+
       "Outputs": [{ "Name": "outputs", "Path": "/outputs" }],
-      "Resources": { "GPU": "1", "CPU": "8", "Memory": "16Gb" },
+      "Resources": { "GPU": "0", "CPU": "8", "Memory": "16Gb" },
+      "inputs": [ { "StorageSource": "IPFS", "Name": "inputs", "CID": {{.InputsCID}}, "path": "/inputs" }
+      },
+
       "Timeout": 1800,
+
       "Verifier": "Noop"
+
     }
+
   }
+
 }
+
+
+
