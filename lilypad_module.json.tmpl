@@ -1,4 +1,3 @@
-
 {
   "machine": { "gpu": 1, "cpu": 8000, "ram": 16000 },
   "gpus": [{ "vram": "24Gb" }]
@@ -8,44 +7,16 @@
       "Deal": { "Concurrency": 1 },
       "Docker": {
         "Entrypoint": [
-          "ls"
+          "ls", {{ .request }}
         ],
         "Image": "ubuntu"
       },
       "Engine": "Docker",
-      "PublisherSpec": { "Type": "IPFS" },
       "Network": { "Type": "None" },
       "Outputs": [{ "Name": "outputs", "Path": "/outputs" }],
-      "Resources": { "GPU": "0", "CPU": "8", "Memory": "16Gb" },
+      "Resources": { "GPU": "1", "CPU": "8", "Memory": "16Gb" },
       "Timeout": 1800,
       "Verifier": "Noop"
     }
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
